@@ -1,0 +1,21 @@
+{
+  "pop_size": 100,
+  "elitism_ratio": 0.1,
+  "cross_rate": 0.3,
+  "max_depth": 10,
+  "input_size": 3,
+  "output_size": 1,
+  "feedforward": "True",
+  "forward_prob": 0.8,
+  "weight_mean": 0,
+  "weight_std": 1,
+  "perturb_std": 0.2,
+  "conn_relocate_rate": 0.05,
+  "weight_perturb_rate": 0.3,
+  "weight_reset_rate": 0.05,
+  "insertion_rate": 0.2,
+  "deletion_rate": 0.1,
+  "random_tree_rate": 0.05,
+  "avail_acts": [1, 2],
+  "acts_mut_rate": 0.1
+}

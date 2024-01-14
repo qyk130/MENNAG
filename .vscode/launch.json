@@ -1,0 +1,13 @@
+{
+    "configurations": [
+    
+        {
+            "name": "Single process test",
+            "type": "python",
+            "request": "launch",
+            "program": "src/train.py",
+            "args": ["-t","Parity","--reseed","-1","-c","settings/parity_direct_nocross.json","-g","1000","-d","out/test","-o","1"],
+            "justMyCode": true
+        }
+    ]
+}
