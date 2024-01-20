@@ -1,6 +1,7 @@
 import numpy as np
 import random
 from nn.FC import FC
+from bitstring import Bitstring
 from analyzer import Q
 
 def min_common_ancestry_dist(n1, n2):
@@ -70,7 +71,65 @@ class VectorModel(Model):
         self.weights = np.random.normal(self.config.weight_mean,
                 self.config.weight_std, self.config.all_size)
 
+class BitstringModel(Model):
+    def __init__(self, config=None, ID=-1, birth_gen=-1, weights=None):
+        super().__init__(config=config, ID=ID, birth_gen=birth_gen)
+        if (weights is None):
+            self.weights = [random.randint(0, 1) for _ in range(config.input_size)]
+        else:
+            self.weights = weights
+
+    def generate(self):
+        self.weights = [random.randint(0, 1) for _ in range(config.input_size)]
+    
+    def execute(self):
+        self.bitstring = Bitstring(self.config, self.weights)
+        return self.bitstring
+    
+    def mutate(self, coeff=1):
+        self.trajectory.append('mutation')
+        self.mutate_function()
+
+    def mutate_function(self, coeff=1):
+        for i in range(self.config.input_size):
+            if (random.random() < self.config.mutation_rate):
+                #flip a random bit
+                self.weights[i] = 1 - self.weights[i]
+    
+    def cross_with(self, m2, param=None):
+        offspring = self.deepcopy()
+        offspring.trajectory.append('crossover')
+        offspring.parents = [self.ID, m2.ID]
+        new_weights = self.weights.copy()
+
+        if (self.config.cross_method == 'uniform'):
+            for i in range(self.config.input_size):
+                if (random.random() < 0.5):
+                    new_weights[i] = m2.weights[i]
+        if (self.config.cross_method == 'one_point'):
+            point = random.randint(0, self.config.input_size)
+            new_weights[point:] = m2.weights[point:]
+        if (self.config.cross_method == 'fixed_point'):
+            point = param['cross_point']
+            new_weights[point:] = m2.weights[point:]
+        offspring.weights = new_weights
+        offspring.mutate_function()
+        return offspring
+
+    def cross_with_mask(self, m2, mask, param=None):
+        offspring = self.deepcopy()
+        offspring.trajectory.append('crossover')
+        offspring.parents = [self.ID, m2.ID]
+        new_weights = self.weights.copy()
+
+        for j in mask:
+            new_weights[j] = m2.weights[j]
+        offspring.weights = new_weights
+        offspring.mutate_function()
+        return offspring
+
 class FCModel(Model):
+    
 
     def __init__(self, config=None, ID=-1, birth_gen=-1, weights=None):
         super().__init__(config=config, ID=ID, birth_gen=birth_gen)

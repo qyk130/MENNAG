@@ -130,7 +130,7 @@ class OMEA(EA):
         param['gen'] = self.gen
         if (self.config.cross_method == 'global_modular'):
             all_weights= []
-            for p in self.pop:
+            for p in self.pop: 
                 all_weights.append(p.weights)
             global_mask = modular_cross_mask(self.config.layer_size, all_weights, False)
             param['global_mask'] = global_mask
