@@ -2,7 +2,7 @@ import os
 import numpy as np
 from configs import Configs
 from nodes import Root
-from model import FCModel, min_common_ancestry_dist
+from model import FCModel, BitstringModel, min_common_ancestry_dist
 from crossmask import modular_cross_mask
 from specie import Specie
 from similarities import get_similarity
@@ -18,7 +18,8 @@ from mpi4py.futures import MPICommExecutor, MPIPoolExecutor
 import train
 genome = {
     "direct": FCModel,
-    "MENNAG": Root
+    "MENNAG": Root,
+    "bitstring": BitstringModel
 }
 
 def crossover(batch):

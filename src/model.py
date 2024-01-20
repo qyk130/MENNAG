@@ -80,7 +80,7 @@ class BitstringModel(Model):
             self.weights = weights
 
     def generate(self):
-        self.weights = [random.randint(0, 1) for _ in range(config.input_size)]
+        self.weights = [random.randint(0, 1) for _ in range(self.config.input_size)]
     
     def execute(self):
         self.bitstring = Bitstring(self.config, self.weights)
@@ -92,7 +92,7 @@ class BitstringModel(Model):
 
     def mutate_function(self, coeff=1):
         for i in range(self.config.input_size):
-            if (random.random() < self.config.mutation_rate):
+            if (random.random() < 1 / self.config.input_size):
                 #flip a random bit
                 self.weights[i] = 1 - self.weights[i]
     
@@ -127,6 +127,13 @@ class BitstringModel(Model):
         offspring.weights = new_weights
         offspring.mutate_function()
         return offspring
+
+    def deepcopy(self):
+        copy = BitstringModel(self.config)
+        copy.trajectory = self.trajectory.copy()
+        copy.ancestors = self.ancestors.copy()
+        copy.weights = self.weights.copy()
+        return copy
 
 class FCModel(Model):
     

@@ -58,6 +58,8 @@ class Linkage:
         # if the input matches the regular expression, the linkage is activated and the value is added to the output.
         reward = 0
         info = {}
+        if not isinstance(input, str):
+            input = map(str, input) 
         linkage_utilization = [0] * self.size
         for i in range(self.size):
             for linkage in self.linkages[i]:
@@ -67,3 +69,6 @@ class Linkage:
         info['linkage_utilization'] = linkage_utilization
         return input, reward, True, info
         #return reward
+
+    def close(self):
+        return

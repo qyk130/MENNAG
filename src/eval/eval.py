@@ -36,7 +36,7 @@ def eval(batches, render=False):
     for seed in seeds:
         env.seed(seed=seed)
         obs = env.reset()
-        while not isinstance(obs, np.ndarray):
+        while (obs is not None) and (not isinstance(obs, np.ndarray)):
             obs = obs[0]
         done = False
         totalReward = 0
@@ -52,6 +52,8 @@ def eval(batches, render=False):
                     action = np.array([[1]])
                 else:
                     action = np.array([[0]])
+            elif (env.__class__.__name__ in ('Linkage', )):
+                action, stats = nn.step(obs)
             else:
                 action, stats = nn.step(obs)
                 action *= env.action_space.high

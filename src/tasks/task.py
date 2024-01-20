@@ -5,6 +5,7 @@ from tasks.retinaNM import RetinaNM
 from tasks.parity import Parity, ParitySmooth
 from tasks.addition import Addition
 from tasks.mnist import MNIST_ACC, MNIST_MSE
+from tasks.linkage import Linkage
 import numpy as np
 import math
 
@@ -24,6 +25,8 @@ def get_task(name, config):
         return MNIST_MSE()
     elif (name == 'Add'):
         return Addition()
+    elif (name == 'Linkage'):
+        return Linkage(config.input_size)
     else:
         env = gym.make(name)
         if name == 'BipedalWalker-v3':
