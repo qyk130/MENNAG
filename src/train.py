@@ -45,7 +45,7 @@ def mpi_main(args, config, task):
     print(ea)
     reseedPeriod = int(args.reseed)
     taskNum = int(args.task_num)
-    #np.random.seed(1)
+    np.random.seed(args.seed)
     seed = np.random.randint(0, 2**32 - 1, size=(taskNum), dtype=np.uint32)
     seed = seed.tolist()
     while not ea.stop():
@@ -146,14 +146,17 @@ if __name__ == '__main__':
     parser.add_argument('-o', '--output', help='Output file')
     parser.add_argument('--mpi', action='store_true')
     parser.add_argument('--reseed', default=-1)
+    parser.add_argument('--seed')
     parser.add_argument('--task_num', default=1)
     parser.add_argument('--debug', action='store_true')
 
     args = parser.parse_args()
-
     args.out_path = args.dir + '/' + args.output
     with open(args.config) as configFile:
         configDict = json.load(configFile)
+
+    if (args.seed is not None):
+        args.seed = int(args.seed)
     config = Configs(configDict)
     print(args.mpi)
     config.mpi = args.mpi

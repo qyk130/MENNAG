@@ -143,7 +143,15 @@ class EA():
         p = p / sum(p)
 
         workloads = []
-        while (len(workloads) < round(pop_size * self.config.cross_rate)):
+
+        for i in range(round(pop_size * elitism_ratio)):
+            offspring = self.pop[i].deepcopy()
+            offspring.ID = self.pop[i].ID
+            offspring.elite()
+            #offspring.compile()
+            new_pop.append(offspring)
+
+        while (len(workloads) + len(new_pop) < round(pop_size * self.config.cross_rate)):
             parent1 = np.random.choice(self.pop, p=p)
             parent2 = random.choice(self.pop)
             if (parent1 != parent2):
@@ -156,12 +164,7 @@ class EA():
         offsprings = train.perform_mpi_function(self.config.mpi, workloads, self.config.num_workers, crossover)
         new_pop.extend(offsprings)
 
-        for i in range(round(pop_size * elitism_ratio)):
-            offspring = self.pop[i].deepcopy()
-            offspring.ID = self.pop[i].ID
-            offspring.elite()
-            #offspring.compile()
-            new_pop.append(offspring)
+        
         while(len(new_pop) < pop_size):
             try:
                 offspring = np.random.choice(self.pop, p=p).deepcopy()

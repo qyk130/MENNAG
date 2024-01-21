@@ -59,7 +59,7 @@ class Linkage:
         reward = 0
         info = {}
         if not isinstance(input, str):
-            input = map(str, input) 
+            input = list(map(str, input))
         linkage_utilization = [0] * self.size
         for i in range(self.size):
             for linkage in self.linkages[i]:
