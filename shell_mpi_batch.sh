@@ -5,12 +5,13 @@
 #PBS -A UQ-EAIT-ITEE
 
 module purge
-module load OpenMPI/2.0.2
-module load gcc/11.2.0
+module load python/3.11.3
+module load OpenMPI/4.1.5
 
-g++ --version
+source env/bin/activate
+
 
 cd MENNAG
 
 echo $TASK
-mpiexec python3 -m mpi4py.futures src/train.py -n 24 -t $TASK --reseed $RESEED -c settings/$SETTING.json -g $GEN -d out/$TASK$SETTING -o $INDEX --mpi --task_num $TASKNUM
+mpiexec python3 -m mpi4py.futures src/train.py -n 24 -t $TASK --reseed $RESEED -c settings/$SETTING.json -g $GEN -d out/$TASK$SETTING -o $INDEX --mpi --task_num $TASKNUM --seed $SEED
